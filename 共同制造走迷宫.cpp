@@ -1,28 +1,30 @@
-//°æÈ¨£ºĞì¼ÓÓê¡¢ÀîÄşÔ¶£¬ÆäËûÈË²»ÄÜËæÒâÊ¹ÓÃ 
+//ç‰ˆæƒï¼šbeanadorkabledragonã€liningyuan19ï¼Œå…¶ä»–äººä¸èƒ½éšæ„ä½¿ç”¨ 
 #include<bits/stdc++.h>
 #include<windows.h>
 #include<conio.h>
 using namespace std;
 
-//º¯ÊıÁĞ±í 
-char space(int n);			//Êä³ön¸ö¿Õ¸ñ(cout) OK 
-void wait(double a);		//OK 
-void gotoxy(int,int);//ÒÆ¶¯¹â±ê µÚxÁĞµÚyĞĞ OK 
-void change_chose(int& );	//È«²¿Í³Ò»¸ñÊ½£¬·½Ïò¼ü¸ÄÎªwasd£¬Ñ¡Ôñ¸ÄÎª¿Õ¸ñ OK 
-void readmap();	//¶ÁÈëµØÍ¼ OK 
-void init();	//³õÊ¼»¯ OK 
+//å‡½æ•°åˆ—è¡¨ 
+char space(int n);		//è¾“å‡ºnä¸ªç©ºæ ¼(cout) OK 
+void wait(double a);	//OK 
+void gotoxy(int,int);	//ç§»åŠ¨å…‰æ ‡ ç¬¬xåˆ—ç¬¬yè¡Œ OK 
+void change_chose(int&);//å…¨éƒ¨ç»Ÿä¸€æ ¼å¼ï¼Œæ–¹å‘é”®æ”¹ä¸ºwasdï¼Œé€‰æ‹©æ”¹ä¸ºç©ºæ ¼ OK 
+void readmap();	//è¯»å…¥åœ°å›¾ OK 
+void init();	//åˆå§‹åŒ– OK 
 void game();	//menuval=1 OK  
-void setmap();	//menuval=2 ÇĞ»»µØÍ¼ OK  
-void setting();	//menuval=3
-void guide();	//menuval=4 ÓÎÏ·ËµÃ÷ OK 
-void printmenu(int);	//Êä³ö²Ëµ¥ OK 
-void setcolor(int,int);	//ÉèÖÃÑÕÉ« ×ÖÌåÉ«-±³¾°É« OK 
+void setmap();	//menuval=2 åˆ‡æ¢åœ°å›¾ OK  
+void setacolor(int,string);	//OK
+void setcolor();//menuval=3 OK
+void guide();	//menuval=4 æ¸¸æˆè¯´æ˜ OK 
+void printmenu(int);	//è¾“å‡ºèœå• OK 
+void setcolor(int,int);	//è®¾ç½®é¢œè‰² å­—ä½“è‰²-èƒŒæ™¯è‰² OK 
+char to16(int);	//OK
 
-//±äÁ¿ 
-int num_map;	//¹²ÕâÃ´¶àÕÅµØÍ¼ 
-int maps[25][55][55];	//µÚxÕÅÍ¼  0Îª¿Õ£¬1ÎªÇ½£¬2ÎªÍæ¼Ò´¦£¬3ÎªÖÕµã 
+//å˜é‡ 
+int num_map;	//å…±è¿™ä¹ˆå¤šå¼ åœ°å›¾ 
+int maps[25][55][55];	//ç¬¬xå¼ å›¾  0ä¸ºç©ºï¼Œ1ä¸ºå¢™ï¼Œ2ä¸ºç©å®¶å¤„ï¼Œ3ä¸ºç»ˆç‚¹ 
 struct pos{
-	int x,y;	//¼ÇÂ¼Î»ÖÃ 
+	int x,y;	//è®°å½•ä½ç½® 
 	bool isthis(int i,int j){
 		return i==x&&j==y;
 	}
@@ -30,81 +32,86 @@ struct pos{
 		x=i,y=j;
 	}
 };
-pos perpos;	//Ö÷½ÇÎ»ÖÃ 
-pos midpos;	//µØÍ¼ÔÚÖĞÑëÊ±×óÉÏ½Ç×ø±ê 
-int maph[25]={12};		//Ã¿ÕÅµØÍ¼µÄ¸ß 
-int mapw[25]={15};		//Ã¿ÕÅµØÍ¼µÄ¿í 
-int mapx = 1;			//ÕıÔÚÍæµÚ¼¸ÕÅµØÍ¼ 
-HANDLE hdle ;			//Õâ¸ö´°¿ÚµÄ¾ä±ú 
-const string menus[6]={"","¿ªÊ¼ÓÎÏ·","ÉèÖÃµØÍ¼","  ÉèÖÃ  ","ÓÎÏ·ËµÃ÷","ÍË³öÓÎÏ·"};
-//ÓÎÏ·¿ªÊ¼ 
+pos perpos;	//ä¸»è§’ä½ç½® 
+pos midpos;	//åœ°å›¾åœ¨ä¸­å¤®æ—¶å·¦ä¸Šè§’åæ ‡ 
+int maph[25]={12};	//æ¯å¼ åœ°å›¾çš„é«˜ 
+int mapw[25]={15};	//æ¯å¼ åœ°å›¾çš„å®½ 
+int mapx = 1;		//æ­£åœ¨ç©ç¬¬å‡ å¼ åœ°å›¾ 
+HANDLE hdle ;		//è¿™ä¸ªçª—å£çš„å¥æŸ„ 
+const string menus[6]={"","å¼€å§‹æ¸¸æˆ","è®¾ç½®åœ°å›¾","è®¾ç½®é¢œè‰²","æ¸¸æˆè¯´æ˜","é€€å‡ºæ¸¸æˆ"};
+int colors[6]={0,3,15,15,4,1};//ç©º-èƒŒæ™¯-å­—ä½“-å¢™ä½“-ç»ˆç‚¹-äººç‰© 
+//æ¸¸æˆå¼€å§‹ 
 void game(){
-	midpos.set( (35-maph[mapx])/2-1 , (100-mapw[mapx]*2)/2-1 );//µØÍ¼ÔÚ×îÖĞĞÄÊ±
+	midpos.set( (35-maph[mapx])/2-1 , (100-mapw[mapx]*2)/2-1 );//åœ°å›¾åœ¨æœ€ä¸­å¿ƒæ—¶
 	for(int i=1;i<=maph[mapx];i++){
-		gotoxy(midpos.y,midpos.x+i-1);//ÉèÖÃĞĞÁĞ 
+		gotoxy(midpos.y,midpos.x+i-1);//è®¾ç½®è¡Œåˆ— 
 		for(int j=1;j<=mapw[mapx];j++){
 			if(maps[mapx][i][j]==2)
-				perpos.set(i,j);//ÉèÖÃ³õÊ¼Íæ¼Ò×ø±ê 
-			//»­³õÊ¼µÄµØÍ¼ 
+				perpos.set(i,j);//è®¾ç½®åˆå§‹ç©å®¶åæ ‡ 
+			//ç”»åˆå§‹çš„åœ°å›¾ 
 			if(maps[mapx][i][j]==1){
-				setcolor(15,3);
-				cout << "¡ö"; //Ç½ 
+				setcolor(colors[3],colors[1]);
+				cout << "â– "; //å¢™ 
 			}else if(maps[mapx][i][j]==0){
-				setcolor(15,3);
-				cout << "  "; //Â· 
+				setcolor(15,colors[1]);
+				cout << "  "; //è·¯ 
 			}else if(perpos.isthis(i,j)){
-				setcolor(1,3);
-				cout << "¡ñ"; //ÈË 
+				setcolor(colors[5],colors[1]);
+				cout << "â—"; //äºº 
 			}else if(maps[mapx][i][j]==3){
-				setcolor(4,3);
-				cout << "¡ï"; //³ö¿Ú 
+				setcolor(colors[4],colors[1]);
+				cout << "â˜…"; //å‡ºå£ 
 			}
 		}
 	}
 	
-	while(1){//Ò»¾ÖÓÎÏ· 
+	while(1){//ä¸€å±€æ¸¸æˆ 
 		int xd,yd,xc,yc;
-		while(1){//Ò»´ÎÒÆ¶¯ 
-			//ÊäÈë·½Ïò 
+		while(1){//ä¸€æ¬¡ç§»åŠ¨ 
+			//è¾“å…¥æ–¹å‘ 
 			int way=getch();
 			change_chose(way);
 			if(way=='w')way=1;
 			else if(way=='a')way=2;
 			else if(way=='s')way=3;
 			else if(way=='d')way=4;
+			else if(way=='b'){
+				system("cls");
+				return;
+			}
 			else continue;
 			const int xx[5]={0,-1,0,1,0};
 			const int yy[5]={0,0,-1,0,1};
 			xc=perpos.x+xx[way],
-			yc=perpos.y+yy[way];	//ÒÆ¶¯ºóÎ»ÖÃ 
-			xd=perpos.x,yd=perpos.y;//ÒÆ¶¯Ç°Î»ÖÃ 
+			yc=perpos.y+yy[way];	//ç§»åŠ¨åä½ç½® 
+			xd=perpos.x,yd=perpos.y;//ç§»åŠ¨å‰ä½ç½® 
 			if(maps[mapx][xc][yc]==0){
 				perpos.set(xc,yc);
 				break;
 			}else if(maps[mapx][xc][yc]==3){
 				system("cls");
 				gotoxy(42,14);
-				setcolor(4,3);
-				cout << "Äãµ½´ïÁËÖÕµã£¡";
-				setcolor(15,3);
+				setcolor(colors[2],colors[1]);
+				cout << "ä½ åˆ°è¾¾äº†ç»ˆç‚¹ï¼";
 				wait(1500);
 				return;
 			}
 		}
 		gotoxy(midpos.y+(yd-1)*2,midpos.x+xd-1);
-		setcolor(15,3);
+		setcolor(15,colors[1]);
 		cout<<"  ";
 		gotoxy(midpos.y+(yc-1)*2,midpos.x+xc-1);
-		setcolor(1,3);
-		cout<<"¡ñ";		//Ö»¸ü¸ÄÓĞĞèÒª¸ü¸ÄµÄµØ·½£¬¶ø²»ÊÇÈ«²¿Êä³ö³öÀ´£¬¾Í²»»áÉÁ 
+		setcolor(colors[5],colors[1]);
+		cout<<"â—";		//åªæ›´æ”¹æœ‰éœ€è¦æ›´æ”¹çš„åœ°æ–¹ï¼Œè€Œä¸æ˜¯å…¨éƒ¨è¾“å‡ºå‡ºæ¥ï¼Œå°±ä¸ä¼šé—ª 
 	}
 }
 
 void setmap(){
-	int x=1,y=1;
+	int x=mapx/5+1,y=mapx%5;
 	while(1){
+		setcolor(colors[2],colors[1]);
 		gotoxy(46,5);
-		cout<<"µØÍ¼Ñ¡Ôñ";
+		cout<<"åœ°å›¾é€‰æ‹©";
 		int maxx=num_map/5+bool(num_map%5);
 		for(int i=1;i<=maxx;i++){
 			for(int j=1;j<=5;j++){
@@ -112,7 +119,7 @@ void setmap(){
 				if(mapi>num_map)break;
 				if(x*5+y-5!=mapi){
 					gotoxy(15+(j-1)*14+4,9+(i-1)*3);
-					printf("µÚ%dÕÅ",mapi);
+					printf("ç¬¬%då¼ ",mapi);
 				}
 				else{
 					gotoxy(15+(j-1)*14+2,9+(i-1)*3-1);
@@ -120,7 +127,7 @@ void setmap(){
 					if(lg)printf("----------");
 					else  printf("---------");
 					gotoxy(15+(j-1)*14+2,9+(i-1)*3);
-					printf("# µÚ%dÕÅ #",mapi);
+					printf("# ç¬¬%då¼  #",mapi);
 					gotoxy(15+(j-1)*14+2,9+(i-1)*3+1);
 					if(lg)printf("----------");
 					else  printf("---------");
@@ -141,7 +148,7 @@ void setmap(){
 			else if( chose=='s' && (x<maxx-1||(x==maxx-1&&(num_map%5==0||y<=num_map%5))) ){
 				x++;
 				break;
-				//ÕâÁ½ÌõÓï¾äÓĞµã³¤£¬´ó¸ÅÒâË¼¾ÍÊÇÅĞ¶ÏÏÂÃæ»òÓÒÃæÊÇ²»ÊÇ¿Õ  
+				//è¿™ä¸¤æ¡è¯­å¥æœ‰ç‚¹é•¿ï¼Œå¤§æ¦‚æ„æ€å°±æ˜¯åˆ¤æ–­ä¸‹é¢æˆ–å³é¢æ˜¯ä¸æ˜¯ç©º  
 			}
 			else if( chose=='d' && ((y<5&&x!=maxx)||(x==maxx&&y<num_map%5)) ){
 				y++;
@@ -150,8 +157,110 @@ void setmap(){
 			else if(chose==' '){
 				mapx=x*5+y-5;
 				gotoxy(46,9+(x-1)*3+5);
-				cout<<"Ñ¡Ôñ³É¹¦";
+				cout<<"é€‰æ‹©æˆåŠŸ";
 				wait(1000);
+				return;
+			}
+			else if(chose=='b'){
+				return;
+			} 
+		}
+		system("cls"); 
+	}
+}
+void setacolor(int colorx,string colormenu){
+	const string colors2[5][5]=
+	{
+	  {"é»‘è‰²","æ·±è“","æ·±ç»¿","è“è‰²"},
+	  {"æ·±çº¢","ç´«è‰²","é»„è‰²","ç™½è‰²"},
+	  {"ç°è‰²","æ·¡è“","æ·¡ç»¿","è“ç»¿"},
+	  {"çº¢è‰²","æ·¡ç´«","æ·¡é»„","äº®ç™½"}
+	};
+	int x=colors[colorx]/4,y=colors[colorx]%4;
+	system("cls");
+	while(1){
+		gotoxy(44,9);
+		cout<<colormenu;
+		for(int i=0;i<4;i++){
+			for(int j=0;j<4;j++){
+				if(i==x&&j==y){
+					gotoxy(26+12*i+2,11+j*3);
+					cout<<"--------";
+					gotoxy(26+12*i+2,11+j*3+1);
+					cout<<"# "<<colors2[i][j]<<" #";
+					gotoxy(26+12*i+2,11+j*3+2);
+					cout<<"--------";
+				}else{
+					gotoxy(26+12*i+2,11+j*3+1);
+					cout<<"  "<<colors2[i][j];
+				}
+			}
+		}
+		while(1){
+			int chose=getch();
+			change_chose(chose);
+			if(chose=='w'&&y>0){
+				y--;
+				break;
+			}else if(chose=='s'&&y<3){
+				y++;
+				break;
+			}else if(chose=='a'&&x>0){
+				x--;
+				break;
+			}else if(chose=='d'&&x<3){
+				x++;
+				break;
+			}else if(chose==' '){
+				colors[colorx]=x*4+y;
+				return;
+			}else if(chose=='b'){
+				return;
+			}
+		}
+		system("cls");
+	}
+}
+void setcolor(){
+	const string colormenus[7]={"","èƒŒæ™¯é¢œè‰²è®¾ç½®","å­—ä½“é¢œè‰²è®¾ç½®","å¢™ä½“é¢œè‰²è®¾ç½®","ç»ˆç‚¹é¢œè‰²è®¾ç½®","äººç‰©é¢œè‰²è®¾ç½®","é€€å‡ºé¢œè‰²è®¾ç½®"};
+	int colorx=1;
+	while(1){
+		setcolor(colors[2],colors[1]);
+		gotoxy(46,9);
+		cout<<"é¢œè‰²è®¾ç½®";
+		gotoxy(0,12);
+		for(int i=1;i<=6;i++){
+			if(colorx==i){
+				cout<<space(42)<<"----------------"<<endl;
+				cout<<space(42)<<"# "<<colormenus[i]<<" #"<<endl;
+				cout<<space(42)<<"----------------"<<endl;
+			}else{
+				cout<<endl;
+				cout<<space(42)<<"  "<<colormenus[i]<<"  "<<endl;
+				cout<<endl;
+			}
+		}
+		while(1){
+			int chose=getch();
+			change_chose(chose);
+			if(chose=='s'&&colorx<6){
+				colorx++;
+				break;
+			}else if(chose=='w'&&colorx>1){
+				colorx--;
+				break;
+			}else if(chose==' '){
+				if(colorx==6)return;
+				setacolor(colorx,colormenus[colorx]);
+				if(colorx==1){
+					string a="color ";
+					a+=to16(colors[1]);
+					if( to16(colors[1]) != '0' ) a+='0';
+					else a+='1';
+					system(a.c_str());//è®¾ç½®å…¨éƒ¨èƒŒæ™¯è‰² 
+				}
+				break;
+			}else if(chose=='b'){
 				return;
 			}
 		}
@@ -159,48 +268,44 @@ void setmap(){
 	}
 }
 
-void setting(){
-	
-}
-
 void guide(){
+	setcolor(colors[2],colors[1]);
 	gotoxy(42,4);
-	cout << "ÓÎÏ·ËµÃ÷";
+	cout << "æ¸¸æˆè¯´æ˜";
 	gotoxy(0,7);
-	cout << space(39) << "ÓÎÏ·Ãû£º×ßÃÔ¹¬"<<endl;
+	cout << space(39) << "æ¸¸æˆåï¼šèµ°è¿·å®«"<<endl;
 	cout << endl;
-	cout << space(42) << "ÓÎÏ·Íæ·¨£º" <<endl ;
+	cout << space(42) << "æ¸¸æˆç©æ³•ï¼š" <<endl ;
 	cout << endl;
-	cout << space(31) << "ÓÃWASD»ò·½Ïò¼ü²Ù×İ½ÇÉ«µ½´ïÖÕµã" <<endl;
+	cout << space(31) << "ç”¨WASDæˆ–æ–¹å‘é”®æ“çºµè§’è‰²åˆ°è¾¾ç»ˆç‚¹" <<endl;
 	cout << endl;
-	cout << space(44) << "Í¼Ê¾£º" <<endl;
+	cout << space(43) << "bé”®è¿”å›" <<endl;
 	cout << endl;
-	cout << space(42) << "¡ö´ú±íÇ½" <<endl;
+	cout << space(44) << "å›¾ç¤ºï¼š" <<endl;
 	cout << endl;
-	cout << space(42) << "¡ñ´ú±íÈË" <<endl;
+	cout << space(42) << "â– ä»£è¡¨å¢™" <<endl;
 	cout << endl;
-	cout << space(42) << "¡ïÎªÖÕµã" <<endl;
+	cout << space(42) << "â—ä»£è¡¨äºº" <<endl;
+	cout << endl;
+	cout << space(42) << "â˜…ä¸ºç»ˆç‚¹" <<endl;
 	cout << endl; 
-	cout << space(33) << "ÎÄµµÖĞµÄmapeditorÊÇµØÍ¼±à¼­Æ÷" <<endl;
+	cout << space(33) << "æ–‡æ¡£ä¸­çš„mapeditoræ˜¯åœ°å›¾ç¼–è¾‘å™¨" <<endl;
 	cout << endl;
-	cout << space(31) << "ÔËĞĞºó½«mapssÖĞµÄÄÚÈİ¿½±´µ½mapsÀï" <<endl; 
+	cout << space(31) << "è¿è¡Œåå°†mapssä¸­çš„å†…å®¹æ‹·è´åˆ°mapsé‡Œ" <<endl; 
 	cout << endl;
-	cout << space(39) << "¸ü¸Ä24ĞĞÊı×ÖÎª15" <<endl;
-	cout << endl;
-	cout << space(40) << "¼´¿É»ñµÃĞÂµØÍ¼" <<endl;
-	cout << endl;
-	cout << space(40) << "µã»÷ÈÎÒâ¼üÍË³ö" <<endl;
+	cout << space(40) << "ç‚¹å‡»ä»»æ„é”®é€€å‡º" <<endl;
 	getch();
 }
 
 char space(int n){
-	for(int i=1;i<n;i++)putchar(' ');//Êä³ön-1¸ö 
-	return ' '; //Ê£ÏÂÒ»¸öÓÃcoutÊä³ö 
+	for(int i=1;i<n;i++)putchar(' ');//è¾“å‡ºn-1ä¸ª 
+	return ' '; //å‰©ä¸‹ä¸€ä¸ªç”¨coutè¾“å‡º 
 }
 
 void printmenu(int menuval){
 	gotoxy(42,7);
-	cout<<"×ßÃÔ¹¬Ğ¡ÓÎÏ·";
+	setcolor(colors[2],colors[1]);
+	cout<<"èµ°è¿·å®«å°æ¸¸æˆ";
 	gotoxy(0,12);
 	for(int i=1;i<=5;i++){
 		if(menuval==i){
@@ -233,14 +338,15 @@ int main(){
 					setmap();
 				}
 				else if(menuval==3){
-					setting();
+					setcolor();
 				}
 				else if(menuval==4){
 					guide();
 				}
 				else if(menuval==5){
 					gotoxy(45,15);
-					cout<<"¸ĞĞ»Ê¹ÓÃ£¡";
+					setcolor(colors[2],colors[1]);
+					cout<<"æ„Ÿè°¢ä½¿ç”¨ï¼";
 					wait(1000);
 					return 0;
 				}
@@ -276,27 +382,29 @@ void readmap(){
 }
 
 void init(){
-	printf("³õÊ¼»¯ÖĞ..."); 
-	system("title ×ßÃÔ¹¬  ÖÆÔìÕß£ºĞì¼ÓÓê¡¢ÀîÄşÔ¶");
+	printf("åˆå§‹åŒ–ä¸­..."); 
+	system("title èµ°è¿·å®«  åˆ¶é€ è€…ï¼šbeanadorkabledragonã€liningyuan19");
 	system("color 3f");
 	system("mode con cols=100 lines=35");
-	hdle=GetStdHandle(STD_OUTPUT_HANDLE);//»ñÈ¡´Ë´°¿Ú¾ä±ú 
-	CONSOLE_CURSOR_INFO CurSor;//Õâ¸ö´°¿ÚµÄ¹â±ê 
-	GetConsoleCursorInfo(hdle, &CurSor);//»ñÈ¡¹â±ê 
-	CurSor.bVisible = false;//Ê¹¹â±ê²»¿É¼û 
-	SetConsoleCursorInfo(hdle, &CurSor);//ÉèÖÃ¹â±ê 
+	hdle=GetStdHandle(STD_OUTPUT_HANDLE);//è·å–æ­¤çª—å£å¥æŸ„ 
+	CONSOLE_CURSOR_INFO CurSor;//è¿™ä¸ªçª—å£çš„å…‰æ ‡ 
+	GetConsoleCursorInfo(hdle, &CurSor);//è·å–å…‰æ ‡ 
+	CurSor.bVisible = false;//ä½¿å…‰æ ‡ä¸å¯è§ 
+	SetConsoleCursorInfo(hdle, &CurSor);//è®¾ç½®å…‰æ ‡ 
 	readmap();
 	system("cls");
 }
 
 void change_chose(int &n){
-	if(n==224) n=getch();//ÔÚwindowsÏÂ£¬·½Ïò¼üÊÇÓÉÁ½¸ö×Ö·û¹¹³É£¬·Ö±ğÊÇ224ºÍÆäËû£¬Ïê¼û´Ëº¯Êı 
-	if(n=='\r')n=' ';//ÔÚwindowsÏÂ£¬°´»Ø³µÊÇ\r
-	if(n==72)n='w';
-	if(n==75)n='a';
-	if(n==80)n='s';
-	if(n==77)n='d';
-	if(n>='A'&&n<='Z')n+=32;//´óĞ´×ÖÄ¸×ªĞ¡Ğ´×ÖÄ¸ 
+	if(n==224){
+		n=getch();//åœ¨windowsä¸‹ï¼Œæ–¹å‘é”®æ˜¯ç”±ä¸¤ä¸ªå­—ç¬¦æ„æˆï¼Œåˆ†åˆ«æ˜¯224å’Œå…¶ä»–ï¼Œè¯¦è§æ­¤å‡½æ•° 
+		if(n==72)n='w';
+		if(n==75)n='a';
+		if(n==80)n='s';
+		if(n==77)n='d';
+	}
+	if(n=='\r')n=' ';//åœ¨windowsä¸‹ï¼ŒæŒ‰å›è½¦æ˜¯\r
+	if(n>='A'&&n<='Z')n+=32;//å¤§å†™å­—æ¯è½¬å°å†™å­—æ¯ 
 }
 
 void gotoxy(int x,int y){
@@ -310,4 +418,9 @@ void wait(double a){
 
 void setcolor(int a,int b){
 	SetConsoleTextAttribute(hdle,a+b*0x10);
+}
+
+char to16(int a){
+	if(a<10)return a+'0';
+	else return a-10+'a';
 }
